@@ -47,11 +47,19 @@ const EventDetails = () => {
     }
   };
  
-  const handleBookNowClick = () => {
-    // Navigate to the ticket booking page, passing the event data
-    navigate("/ticket-booking", { state: { event } });
+  const handleBookNowClick = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3000/events/event_details/${id}`);
+      console.log(response);
+      
+      if (response.data) {
+        navigate("/ticket-booking", { state: { event, bookingDetails: response.data } });
+      }
+    } catch (err) {
+      console.error("Error fetching booking details:", err);
+    }
   };
- 
+  
   if (!event) {
     return <div className="text-center text-xl font-semibold mt-10">Loading event details...</div>;
   }
